@@ -29,37 +29,38 @@ func (memory *MemoryRepository) Get(id uuid.UUID) (customer.Customer, error) {
 
 //Add function add a new customer to repository.
 func (memory *MemoryRepository) Add(newcustomer customer.Customer) error {
-	if memory.customers == nil {
-		memory.Lock()
-		memory.customers = make(map[uuid.UUID]customer.Customer)
-		memory.Unlock()
-	}
+	memory.createCustomerMapIfNotExists()
+
 	if memory.customerExists(newcustomer) {
 		return customer.ErrFailedToAddCustomer
 	}
-	memory.Lock()
-	memory.customers[newcustomer.GetID()] = newcustomer
-	memory.Unlock()
+	memory.setCustomerIntoMap(newcustomer)
 	return nil
 }
 
 //Update function update a new customer to repository.
 func (memory *MemoryRepository) Update(newcustomer customer.Customer) error {
-	if memory.customers == nil {
-		memory.Lock()
-		memory.customers = make(map[uuid.UUID]customer.Customer)
-		memory.Unlock()
-	}
+	memory.createCustomerMapIfNotExists()
 	if !memory.customerExists(newcustomer) {
 		return customer.ErrUpdateCustomer
 	}
-	memory.Lock()
-	memory.customers[newcustomer.GetID()] = newcustomer
-	memory.Unlock()
+	memory.setCustomerIntoMap(newcustomer)
 	return nil
 }
 
 func (memory *MemoryRepository) customerExists(customer customer.Customer) bool {
 	_, exists := memory.customers[customer.GetID()]
 	return exists
+}
+func (memory *MemoryRepository) createCustomerMapIfNotExists() {
+	if memory.customers == nil {
+		memory.Lock()
+		memory.customers = make(map[uuid.UUID]customer.Customer)
+		memory.Unlock()
+	}
+}
+func (memory *MemoryRepository) setCustomerIntoMap(newcustomer customer.Customer) {
+	memory.Lock()
+	memory.customers[newcustomer.GetID()] = newcustomer
+	memory.Unlock()
 }

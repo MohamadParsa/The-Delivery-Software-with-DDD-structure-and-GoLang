@@ -1,5 +1,7 @@
 package order
 
+//TODO: manage add/remove products.
+//TODO: manage count conditions for products.
 import (
 	"errors"
 
@@ -49,6 +51,7 @@ func (order *Order) GetOrderedProducts() []*OrderedProduct {
 func (order *Order) SetProducts(products []*OrderedProduct) {
 	order.products = products
 }
+
 func uuidIsNotEmpty(customerID uuid.UUID) bool {
 	return customerID != uuid.Nil
 }
