@@ -21,7 +21,7 @@ const (
 /*
 Pack is an entity that represents a pack in all domain.
 */
-type Pack struct {
+type Delivery struct {
 	//ID is the identifier of the Entity, the ID is shared for all sub domains.
 	ID uuid.UUID
 	//ChosenDeliveryDate is the chosen date and time to deliver the pack.

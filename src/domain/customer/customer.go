@@ -58,7 +58,7 @@ func (customer *Customer) GetID() uuid.UUID {
 
 //SetID sets the customer ID.
 func (customer *Customer) SetID(id uuid.UUID) error {
-	customer.personExists()
+	customer.createPersonEntityIfNotExists()
 
 	if personIdIsNotEmpty(customer.person.ID) {
 		return ErrOverwritePersonID
@@ -77,7 +77,7 @@ func (customer *Customer) GetFirstName() string {
 
 //SetFirstName sets the customer first name.
 func (customer *Customer) SetFirstName(firstName string) error {
-	customer.personExists()
+	customer.createPersonEntityIfNotExists()
 	if stringValueIsEmpty(firstName) {
 		return ErrInvalidFirstName
 	}
@@ -92,7 +92,7 @@ func (customer *Customer) GetLasttName() string {
 
 //SetLastName sets the customer last name.
 func (customer *Customer) SetLastName(lastName string) error {
-	customer.personExists()
+	customer.createPersonEntityIfNotExists()
 	if stringValueIsEmpty(lastName) {
 		return ErrInvalidLastName
 	}
@@ -107,7 +107,7 @@ func (customer *Customer) GetPhoneNumber() string {
 
 //SetPhoneNumber sets the customer phone number.
 func (customer *Customer) SetPhoneNumber(phoneNumber string) error {
-	customer.personExists()
+	customer.createPersonEntityIfNotExists()
 	if stringValueIsEmpty(phoneNumber) {
 		return ErrInvalidPhoneNumber
 	}
@@ -122,7 +122,7 @@ func (customer *Customer) GetEmail() string {
 
 //SetEmail sets the customer email.
 func (customer *Customer) SetEmail(email string) error {
-	customer.personExists()
+	customer.createPersonEntityIfNotExists()
 	if stringValueIsEmpty(email) {
 		return ErrInvalidEmail
 	}
@@ -151,7 +151,7 @@ func checkCustomerRequirdField(newPerson *entity.Person) error {
 	}
 	return nil
 }
-func (customer *Customer) personExists() {
+func (customer *Customer) createPersonEntityIfNotExists() {
 	if customer.person == nil {
 		customer.person = new(entity.Person)
 	}

@@ -61,7 +61,7 @@ func Test_NewCustomerValidations(t *testing.T) {
 		t.Run(item.test, func(t *testing.T) {
 			_, err := NewCustomer(item.firstName, item.lastName, item.phoneNumber, item.email)
 			if err != item.expectedErr {
-				t.Errorf("Expected error %v got %g ", item.expectedErr, err)
+				t.Errorf("expected error :%v got %g ", item.expectedErr, err)
 			}
 		})
 	}

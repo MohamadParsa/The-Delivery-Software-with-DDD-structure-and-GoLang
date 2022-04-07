@@ -34,7 +34,7 @@ func TestMemory_GetCustomer(t *testing.T) {
 		t.Run(testcase.name, func(t *testing.T) {
 			_, errOfGet := repository.Get(testcase.id)
 			if errOfGet != testcase.expectedErr {
-				t.Errorf("expected error %v , got %v", testcase.expectedErr, errOfGet)
+				t.Errorf("expected error :%v , got %v", testcase.expectedErr, errOfGet)
 			}
 		})
 	}
@@ -65,7 +65,7 @@ func TestMemory_AddCustomer(t *testing.T) {
 
 			errOfAdd := memoryRepository.Add(testcase.newCustomer)
 			if errOfAdd != testcase.expectedErr {
-				t.Errorf("expected error %v, got %v", testcase.expectedErr, errOfAdd)
+				t.Errorf("expected error :%v, got %v", testcase.expectedErr, errOfAdd)
 			}
 
 			id := testcase.newCustomer.GetID()
@@ -110,7 +110,7 @@ func TestMemory_UpdateCustomer(t *testing.T) {
 
 			errOfAdd := memoryRepository.Update(testcase.newCustomer)
 			if errOfAdd != testcase.expectedErr {
-				t.Errorf("expected error %v, got %v", testcase.expectedErr, errOfAdd)
+				t.Errorf("expected error :%v, got %v", testcase.expectedErr, errOfAdd)
 			}
 
 			errUpdate := memoryRepository.Update(testcase.newCustomer)

@@ -2,7 +2,9 @@ package order
 
 import (
 	"domain/customer"
-	"domain/customer/customermemory"
+	customerMemory "domain/customer/memory"
+	"domain/product"
+	productMemory "domain/product/memory"
 )
 
 type OrderConfiguration func(orderService *OrderService) error
@@ -19,13 +21,25 @@ func NewOrderService(configurators ...OrderConfiguration) (*OrderService, error)
 }
 
 func loadCustomerMemoryRepository() OrderConfiguration {
-	customerRepository := customermemory.New()
+	customerRepository := customerMemory.New()
 	return attachCustomerRepository(customerRepository)
 }
 
 func attachCustomerRepository(customerRepository customer.CustomerRepository) OrderConfiguration {
 	return func(orderService *OrderService) error {
 		orderService.customer = customerRepository
+		return nil
+	}
+}
+
+func loadProductMemoryRepository() OrderConfiguration {
+	productRepository := productMemory.New()
+	return attachProductRepository(productRepository)
+}
+
+func attachProductRepository(productRepository product.ProductRepository) OrderConfiguration {
+	return func(orderService *OrderService) error {
+		orderService.products = productRepository
 		return nil
 	}
 }

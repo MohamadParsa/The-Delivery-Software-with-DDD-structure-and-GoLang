@@ -2,6 +2,7 @@ package order
 
 import (
 	"domain/customer"
+	"domain/product"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -9,9 +10,10 @@ import (
 
 type OrderService struct {
 	customer customer.CustomerRepository
+	products product.ProductRepository
 }
 
-func AddOrder(customerID uuid.UUID, productsID []uuid.UUID) error {
+func (orderService *OrderService) AddOrder(customerID uuid.UUID, productsID uuid.UUID, count int) error {
 	orderService, err := initialOrderService()
 	if err != nil {
 		return err
@@ -21,11 +23,20 @@ func AddOrder(customerID uuid.UUID, productsID []uuid.UUID) error {
 		return err
 	}
 	fmt.Println(customer)
+	// selectedProducts := []product.Product{}
+	// for _, productID := range productsIDs {
+	// 	orderedProduct, err := orderService.products.Get(productID)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	selectedProducts = append(selectedProducts, *orderedProduct)
+
+	// }
 	return nil
 }
 
 func initialOrderService() (*OrderService, error) {
 	customersLoader := loadCustomerMemoryRepository()
-
-	return NewOrderService(customersLoader)
+	productsLoader := loadProductMemoryRepository()
+	return NewOrderService(customersLoader, productsLoader)
 }
