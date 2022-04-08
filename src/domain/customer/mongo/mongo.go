@@ -37,23 +37,6 @@ type mongoCustomer struct {
 	email       string    `bson:"email"`
 }
 
-func (mongoRepository *MongoRepository) findCustomerItemByID(id uuid.UUID) (*mongo.Cursor, error) {
-	Context, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	return mongoRepository.customers.Find(Context, bson.M{"id": id})
-}
-
-//convertMongoItemToCustomer takes in a internal structure and converts into customer.
-func (mongocustumer mongoCustomer) convertMongoItemToCustomer() customer.Customer {
-	Customer := customer.Customer{}
-	Customer.SetID(mongocustumer.id)
-	Customer.SetFirstName(mongocustumer.firstName)
-	Customer.SetLastName(mongocustumer.lastName)
-	Customer.SetPhoneNumber(mongocustumer.phoneNumber)
-	Customer.SetEmail(mongocustumer.email)
-	return Customer
-}
-
 func New(connectionContext context.Context, connectionString string) (*MongoRepository, error) {
 	db, colletcion, err := connectDataBaseAndCollection(connectionContext, connectionString, dataBaseName, collectionName)
 	if err != nil {
@@ -64,6 +47,7 @@ func New(connectionContext context.Context, connectionString string) (*MongoRepo
 		customers: colletcion,
 	}, nil
 }
+
 func (mongoRepository *MongoRepository) Get(id uuid.UUID) (customer.Customer, error) {
 	mongoCursor, err := mongoRepository.findCustomerItemByID(id)
 	if err != nil {
@@ -82,11 +66,31 @@ func (mongoRepository *MongoRepository) Add(newCustomer customer.Customer) error
 	return err
 }
 
+func (mongoRepository *MongoRepository) Update(newCustomer customer.Customer) error {
+	return nil
+}
+
 func (mongoRepository *MongoRepository) insertMongoCustomerIntoDataBase(mongocustomer mongoCustomer) error {
 	Context, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_, err := mongoRepository.customers.InsertOne(Context, mongocustomer)
 	return err
+}
+
+func (mongoRepository *MongoRepository) findCustomerItemByID(id uuid.UUID) (*mongo.Cursor, error) {
+	Context, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	return mongoRepository.customers.Find(Context, bson.M{"id": id})
+}
+
+func (mongocustumer mongoCustomer) convertMongoItemToCustomer() customer.Customer {
+	Customer := customer.Customer{}
+	Customer.SetID(mongocustumer.id)
+	Customer.SetFirstName(mongocustumer.firstName)
+	Customer.SetLastName(mongocustumer.lastName)
+	Customer.SetPhoneNumber(mongocustumer.phoneNumber)
+	Customer.SetEmail(mongocustumer.email)
+	return Customer
 }
 
 func convertCustomerToMongoItem(customerStuct customer.Customer) mongoCustomer {
